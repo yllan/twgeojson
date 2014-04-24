@@ -5,7 +5,7 @@ twCounty2010.topo.json.simplify=0.00000008
 twVote1982.topo.json.simplify=0.0000001
 
 
-all: twVillage1982.topo.json twTown1982.topo.json twCounty2010.topo.json twVote1982.topo.json
+all: twVillage1982.topo.json twTown1982.topo.json twCounty2010.topo.json twVote1982.topo.json twCounty2013.topo.json
 
 clean:
 	rm -f tw*.geo.json tw*.topo.json
@@ -35,7 +35,9 @@ tmpdir/TWN_COUNTY.shp: tmpdir/tw-county.rar
 	(cd tmpdir && unrar x ../$<)
 	touch $@
 
-# original command: ogr2ogr -f geojson $@ $<
+twCounty2013.topo.json: raw_data/twCounty2013/city.shp
+	./node_modules/.bin/mapshaper -p 0.01 $< -f topojson --encoding big5 -o $@
+
 twCounty2010.topo.json: tmpdir/TWN_COUNTY.shp
 	./node_modules/.bin/mapshaper -p 0.01 $< -f topojson --encoding big5 -o $@
 
